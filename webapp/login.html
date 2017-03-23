@@ -1,0 +1,32 @@
+<div class="row" ng-controller="LoginCtrl">
+	<div class="col s4 offset-s4">
+		  <form class="col s12">
+		  <div class="row">
+		  		<div class="col s12">
+		  			<div class="input-field col s4 offset-s4">
+		  				<input id="username" type="text" ng-model="username">
+		  				<label for="username">Username</label>
+		  			</div>
+		  		</div>
+		  	</div>
+
+		  	<div class="row">
+		  			<div class="col s12">
+		  				<div class="input-field col s4 offset-s4">
+		  					<input id="password" type="password" ng-model="password">
+		  					<label for="password">Password</label>
+		  				</div>
+		  			</div>
+		  	</div>
+
+		  	<div class="row">
+		  			<div class="col s4 offset-s4">
+		  				<button class="btn waves-effect waves-light" ng-click="login()">Log In
+		  				    <i class="material-icons right">send</i>
+		  				 </button>
+		  			</div>
+		  	</div>
+
+		  </form>
+	</div>
+</div>

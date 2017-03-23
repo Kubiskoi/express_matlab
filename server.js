@@ -1,16 +1,20 @@
+var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
+var path = require('path');
+
 
 
 var shell = require('shelljs');
 
 app.use(bodyParser.json());
+app.use('/', express.static('webapp'));
+app.use(express.static(path.join(__dirname, 'index.html')));
 
-app.get('/', function(req, res){
-	res.send('<h1>Hello world</h1>');
-}); 
+
+
 
 app.post('/matlab/result',function(req,res){
 	// console.log(req.body);
