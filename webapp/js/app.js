@@ -8,5 +8,10 @@ app.config(function($routeProvider) {
 	when('/login',{
 		templateUrl : "login.html",
 		controller: "LoginCtrl"
-	});
+	}).
+	when("/main", {
+        templateUrl : "main.html",
+        controller: "MainCtrl"
+    }).
+    otherwise({redirectTo:'/login'});
 });

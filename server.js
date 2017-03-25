@@ -4,14 +4,42 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var path = require('path');
-
-
-
+var session = require('express-session');
 var shell = require('shelljs');
+var cookieParser = require('cookie-parser')
+
+
+var loginR = require('./routes/loginR.js');
+
+
+
+app.use(session({
+    key: 'userID',
+    secret: 'wow magic',
+    cookie: {maxAge: 900000},
+    rolling: true,
+    resave: false,
+    saveUninitialized: false
+}));
 
 app.use(bodyParser.json());
+app.use(cookieParser())
 app.use('/', express.static('webapp'));
 app.use(express.static(path.join(__dirname, 'index.html')));
+
+
+app.post('/login', loginR);
+
+app.get('/get_logget_user', function(req,res){
+	// console.log(req.session.lu);
+	// console.log(req.cookies.lu);
+	if(req.session.lu == req.cookies.lu && req.session.lu && req.cookies.lu){
+		res.sendStatus(200);
+	}else{
+		res.sendStatus(401);
+	}
+});
+
 
 
 
