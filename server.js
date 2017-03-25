@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'index.html')));
 
 app.post('/login', loginR);
 
-app.get('/get_logget_user', function(req,res){
+app.get('/get_logged_user', function(req,res){
 	// console.log(req.session.lu);
 	// console.log(req.cookies.lu);
 	if(req.session.lu == req.cookies.lu && req.session.lu && req.cookies.lu){
