@@ -18,3 +18,25 @@ app.config(function($routeProvider) {
     }).
     otherwise({redirectTo:'/login'});
 });
+
+
+//sprav get na get_logged_user, server vrati 200 ak ma user session cize je prihlaseny vtedy tato factory vrati true
+//ak server vrati 401 user nema session a nie je prihlaseny, factory vrati false
+app.factory('isLogged',function($http){
+    return {
+        isLo:function(){
+            var req = {
+                method:'GET',
+                url: 'get_logged_user'
+            }
+
+            var promise = $http(req).then(function(){
+                return true;
+            },function(){
+                return false;
+            })
+
+            return promise;
+        }
+    }
+})

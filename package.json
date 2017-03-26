@@ -8,6 +8,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "express-session": "^1.15.1",
+    "junk": "^2.1.0",
     "ldapjs": "^1.0.1",
     "randomstring": "^1.1.5",
     "shelljs": "^0.7.7",

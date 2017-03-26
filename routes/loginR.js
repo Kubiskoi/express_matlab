@@ -4,7 +4,9 @@ var randomstring = require("randomstring");
 module.exports = function (req, res) {
     // console.log('login', req.body);
 
+    //ak som prijal meno a heslo tak ...
     if (req.body.username && req.body.password) {
+        //... vytvorim ldap clienta
         var client = ldap.createClient({
             url: 'ldap://ldap.stuba.sk'
         });
@@ -22,20 +24,22 @@ module.exports = function (req, res) {
                 //console.log('Login problem', err);
                 if (err.name === 'InvalidCredentialsError') {
                     console.log('Credential error');
+                    //ak je nejaky problem vrat 401, to uz client rozpozna a zobrazi spravu
                     res.sendStatus(401);
 
-                    // res.redirect('/');
                 }
                 else {
                     console.log('Unknown error: ' + JSON.stringify(err));
+                    //ak je nejaky problem vrat 401, to uz client rozpozna a zobrazi spravu
                     res.sendStatus(401);
                     // res.redirect('/');
                     // problem with ldap, try later
                 }
             }
             else{
-                // client unbind? mozno uz mi netreba connection
-                // console.log('Login successful!');
+                //vytvorim random string
+                //ten priradim sesne na serveri
+                //a nastavim ho aj ako cookies
                 var lu_key = randomstring.generate();
                 req.session.lu = lu_key;
                 res.cookie('lu', lu_key);
@@ -45,7 +49,7 @@ module.exports = function (req, res) {
         });
 
     } else {
+        //nedostal som meno alebo heslo tak vratim chybu, client rozpozna  upozorni na zle vstupy
         res.sendStatus(401);
-        // res.redirect('/');
     }
 };

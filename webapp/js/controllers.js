@@ -1,17 +1,11 @@
-app.controller('LoginCtrl', function($scope,$location,$http) {
+app.controller('LoginCtrl', function($scope,$location,$http,isLogged) {
 	$scope.wrong_cred = false;
 	
-	//sprav get na get_logged_user
-	//ak vrati ok, cize som prihlasney cize redirect na main
-	//ak vratie 401 unauthorized tak nic sa nedeje lebo som na login screene tak tu ostanem
-	var req = {
-		method:'GET',
-		url: 'get_logged_user'
-	}
-	$http(req).then(function successCallback(response){
-		$location.path('main');
-	},function errorCallback(response){
-	})
+	//ak user_logged je true presmeruj na main
+	//ak user_logged je false ostan na login formulari
+	isLogged.isLo().then(function(user_logged){
+		if(user_logged) $location.path('main');
+	}) 
 
 	//po submitnuti loginformu postni data na server
 	//ak vrati ze si zadal spravne meno a heslo tak redirect na main
@@ -26,25 +20,23 @@ app.controller('LoginCtrl', function($scope,$location,$http) {
 		$http(req).then(function successCallback(response) {
 			$location.path('main');
 		}, function errorCallback(response) {
-			$scope.wrong_cred = false;
+			$scope.wrong_cred = true;
 		});
 	}
 })
 
 
 
-app.controller('MainCtrl', function($scope,$location,$http) {
+app.controller('MainCtrl', function($scope,$location,$http,isLogged) {
 
-	//ak sa hitne route main tak over ci som prohlaseny
-	//ak som prihlaseny vsetko ok nic sa nedeje
-	//ak sa vrati 401 unauthorized tak redirect na login
-	var req = {
-		method:'GET',
-		url: 'get_logged_user'
-	}
-
-	$http(req).then(function successCallback(response){
-	},function errorCallback(response){
-		$location.path('login');
+	//ak user_looged rovana sa true, user je prihlaseny cize ostavam na main
+	//ak user_logged rovna sa false, user nie je prihlaseny tak treba presmerovat na login formular
+	isLogged.isLo().then(function(user_logged){
+		if(!user_logged) $location.path('login');
 	})
+
+	$http.get('/list_experiments').then(function(data){
+		$scope.exps = data.data.experiments;
+	},function(err){})
+	
 })
