@@ -1,7 +1,25 @@
-<div class="row" ng-repeat="exp in exps">
-	<div class="col s4 offset-s4">
-		<div class="card-panel">
-			<span>{{exp}}</span>
-		</div>
-	</div>
+<div class="row">
+	<div class="col s2 offset-s1 center-align">
+	  <div class="file-field input-field">
+	    <div class="btn">
+	      <span>New</span>
+	      <input type="file" accept=".zip" nv-file-select uploader="uploader" options="{'url':'save_new_exp'}">
+	    </div>
+	    <div class="file-path-wrapper">
+	      <input class="file-path validate" type="text">
+	    </div>
+	  </div>
+			<ul>
+			    <li ng-repeat="item in uploader.queue">
+			        <!-- Name: <span ng-bind="item.file.name"></span><br/> -->
+			        <button ng-click="item.upload()" class="btn waves-effect waves-light">Upload<i class="material-icons right">send</i></button>
+			    </li>
+			</ul>
+
+      </div>
+      <div class="col s4 offset-s1">
+              <div class="card-panel" ng-repeat="exp in exps">
+				<span>{{exp}}</span>
+			</div>
+       </div>
 </div>

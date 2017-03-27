@@ -6,11 +6,13 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var session = require('express-session');
 var shell = require('shelljs');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
+var busboy = require('connect-busboy');
 
 
 var loginR = require('./routes/loginR.js');
 var listExpsR = require('./routes/listExpsR.js');
+var receiveExpR = require('./routes/receiveExpR.js');
 
 
 
@@ -31,6 +33,12 @@ app.use(express.static(path.join(__dirname, 'index.html')));
 
 app.post('/login', loginR);
 app.get('/list_experiments', listExpsR);
+
+app.use(busboy());
+app.post('/save_new_exp', receiveExpR);
+
+app.use(bodyParser.json());
+
 
 //overi clientovi ci je prihlasny, vrati 200 ak je prihlaseny, vrati false ak nie je prihlaseny
 app.get('/get_logged_user', function(req,res){
