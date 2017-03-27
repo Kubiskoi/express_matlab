@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function($scope,$location,$http,isLogged) {
+app.controller('LoginCtrl', function($scope,$location,$http,isLogged,$timeout) {
 	$scope.wrong_cred = false;
 	
 	//ak user_logged je true presmeruj na main
@@ -17,10 +17,14 @@ app.controller('LoginCtrl', function($scope,$location,$http,isLogged) {
 			data: {"username":$scope.username,"password":$scope.password}
 		}
 
-		$http(req).then(function successCallback(response) {
+		$http(req).then(function(response) {
 			$location.path('main');
-		}, function errorCallback(response) {
+		}, function(response) {
 			$scope.wrong_cred = true;
+			//skovaj warovanie o zlom mene alebo heslo po 2s
+			$timeout(function(){
+				$scope.wrong_cred=false;
+			},2000);
 		});
 	}
 })
@@ -50,10 +54,11 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 	//angular file uploader
 	//https://github.com/nervgh/angular-file-upload
 	var that = this;
-	$scope.uploader = new FileUploader();
+	$scope.uploader = new FileUploader({queueLimit: 1});
 
 	//ak sa uspesne uploadne zipnuty experiment tak si nacitam znova experimenty aby sa updatlo view
 	$scope.uploader.onSuccessItem = function(item, response, status, headers) {
+		$scope.uploader.clearQueue();
 		that.load_experiments();
 	};
 
@@ -62,4 +67,54 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 		alert('Something went wrong during uploadig! Server needs to be restarted!');
 	};
 
+	//jQuery tu asi funguje kedze v index.html je nacitane skor
+	$('.modal').modal();
+
+	//stlaci ikonu kontaineru vyskoci modal pre potvrdenie vymazania experimentu
+	$scope.delete = function(about_to_be_deleted){
+		$scope.about_to_be_deleted = about_to_be_deleted;
+		$('#delete_modal').modal('open');
+	}
+
+	//ak potvrdi zrusenenie experimentu sprav delete na server a successful callback
+	// zavri modal a refresni experimenty
+	$scope.confirmedDeletion = function(delete_exp){
+		$http.delete('/delete_experiment/'+delete_exp).then(function(){
+			$('#delete_modal').modal('close');
+			that.load_experiments();
+		},function(err){})
+	}
+
+	//ak nepotvrdi zrusenie experimentu iba zavri modal
+	$scope.noDelete = function(){
+		$('#delete_modal').modal('close');
+	}
+
+	//server zazipuje dane meno experimentu a stiahne
+	$scope.download = function(name){
+	
+		$http.get('/download_experiment/'+name).then(function(data, status, headers, config){
+			// var anchor = angular.element('<a/>');
+			     // anchor.attr({
+			     //     href: 'data:attachment/zip;charset=utf-8,' + encodeURI(data),
+			     //     target: '_blank',
+			     //     download: 'filename.csv'
+			     // })[0].click();
+		},function(err){})
+	}
+
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+

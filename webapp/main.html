@@ -2,8 +2,8 @@
 	<div class="col s2 offset-s1 center-align">
 	  <div class="file-field input-field">
 	    <div class="btn">
-	      <span>New</span>
-	      <input type="file" accept=".zip" nv-file-select uploader="uploader" options="{'url':'save_new_exp'}">
+	      <span>add</span>
+	      <input type="file" accept=".zip" nv-file-select  filters="queueLimit" uploader="uploader" options="{'url':'save_new_exp'}">
 	    </div>
 	    <div class="file-path-wrapper">
 	      <input class="file-path validate" type="text">
@@ -19,7 +19,23 @@
       </div>
       <div class="col s4 offset-s1">
               <div class="card-panel" ng-repeat="exp in exps">
-				<span>{{exp}}</span>
+				<div>{{exp}}</div>
+				
+				<a style="color:black;" class="waves-effect btn-small" ng-click="delete(exp)"><i class="material-icons">delete</i></a>
+				<a style="color:black;" class="waves-effect btn-small" ng-click="download(exp)"><i class="small material-icons">play_for_work</i></a>
 			</div>
        </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="delete_modal" class="modal">
+	<div class="modal-content">
+    	<h4>Delete Experiment</h4>
+    	<p>Delete experiment: {{about_to_be_deleted}} ?</p>
+	</div>
+	<div class="modal-footer">
+    	<!-- <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
+    	<button class="btn-flat" ng-click="noDelete()">No</button>
+    	<button class="btn-flat" ng-click="confirmedDeletion(about_to_be_deleted)">Yes</button>
+	</div>
 </div>
