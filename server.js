@@ -15,6 +15,7 @@ var listExpsR = require('./routes/listExpsR.js');
 var receiveExpR = require('./routes/receiveExpR.js');
 var deleteExperimentR = require('./routes/deleteExperimentR.js');
 var downloadExperimentR = require('./routes/downloadExperimentR.js');
+var detailR = require('./routes/detailR.js');
 
 
 
@@ -43,6 +44,7 @@ app.use(bodyParser.json());
 
 app.delete('/delete_experiment/:del_exp_name',deleteExperimentR);
 app.get('/download_experiment/:exp_name',downloadExperimentR);
+app.get('/detail/:exp_name',detailR);
 
 
 //overi clientovi ci je prihlasny, vrati 200 ak je prihlaseny, vrati false ak nie je prihlaseny

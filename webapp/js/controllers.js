@@ -93,9 +93,9 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 	//server zazipuje dane meno experimentu a stiahne
 	$scope.download = function(name){
 		
-		//https://jsfiddle.net/koldev/cW7W5/
 		$http.get('/download_experiment/'+name,{responseType: "blob"}).then(function(data, status, headers, config){
 			
+			//https://jsfiddle.net/koldev/cW7W5/
 			var blob = new Blob([data.data], {type: "octet/stream"});
 			var url = window.URL.createObjectURL(blob);
 			var a = document.createElement("a");
@@ -110,6 +110,12 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 		},function(err){})
 	}
 
+	//stlaci ikonu infa a rozbali sa obsah priecinku
+	$scope.detail = function(name){
+		$http.get('/detail/'+name).then(function(data){
+			console.log(data);
+		},function(err){})
+	}
 })
 
 

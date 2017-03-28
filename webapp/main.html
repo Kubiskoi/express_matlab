@@ -11,7 +11,6 @@
 	  </div>
 			<ul>
 			    <li ng-repeat="item in uploader.queue">
-			        <!-- Name: <span ng-bind="item.file.name"></span><br/> -->
 			        <button ng-click="item.upload()" class="btn waves-effect waves-light">Upload<i class="material-icons right">send</i></button>
 			    </li>
 			</ul>
@@ -20,7 +19,8 @@
       <div class="col s4 offset-s1">
               <div class="card-panel" ng-repeat="exp in exps">
               	<div class="row">
-					<div class="col s9">{{exp}}</div>
+					<div class="col s9">{{exp}}	<a style="color:black;" class="waves-effect btn-small" ng-click="detail(exp)"><i class="material-icons tiny">info_outline</i></a>
+					</div>
 					<div class="col s3">
 							<a style="color:black;" class="waves-effect btn-small" ng-click="download(exp)"><i class="small material-icons">play_for_work</i></a>
 							<a style="color:black;" class="waves-effect btn-small" ng-click="delete(exp)"><i class="material-icons">delete</i></a>
@@ -41,4 +41,13 @@
     	<button class="btn-flat" ng-click="noDelete()">No</button>
     	<button class="btn-flat" ng-click="confirmedDeletion(about_to_be_deleted)">Yes</button>
 	</div>
+</div>
+<div>
+<b>todo</b>
+	<ul>
+		<li>dokoncit listovanie</li>
+		<li>logout</li>
+		<li>overenie pridania podla mena experimentu</li>
+		<li>aktivovat AUTH!</li>
+	</ul>
 </div>
