@@ -19,10 +19,13 @@
       </div>
       <div class="col s4 offset-s1">
               <div class="card-panel" ng-repeat="exp in exps">
-				<div>{{exp}}</div>
-				
-				<a style="color:black;" class="waves-effect btn-small" ng-click="delete(exp)"><i class="material-icons">delete</i></a>
-				<a style="color:black;" class="waves-effect btn-small" ng-click="download(exp)"><i class="small material-icons">play_for_work</i></a>
+              	<div class="row">
+					<div class="col s9">{{exp}}</div>
+					<div class="col s3">
+							<a style="color:black;" class="waves-effect btn-small" ng-click="download(exp)"><i class="small material-icons">play_for_work</i></a>
+							<a style="color:black;" class="waves-effect btn-small" ng-click="delete(exp)"><i class="material-icons">delete</i></a>
+					</div>	
+				</div>
 			</div>
        </div>
 </div>

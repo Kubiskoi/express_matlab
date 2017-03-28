@@ -92,14 +92,21 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 
 	//server zazipuje dane meno experimentu a stiahne
 	$scope.download = function(name){
-	
-		$http.get('/download_experiment/'+name).then(function(data, status, headers, config){
-			// var anchor = angular.element('<a/>');
-			     // anchor.attr({
-			     //     href: 'data:attachment/zip;charset=utf-8,' + encodeURI(data),
-			     //     target: '_blank',
-			     //     download: 'filename.csv'
-			     // })[0].click();
+		
+		//https://jsfiddle.net/koldev/cW7W5/
+		$http.get('/download_experiment/'+name,{responseType: "blob"}).then(function(data, status, headers, config){
+			
+			var blob = new Blob([data.data], {type: "octet/stream"});
+			var url = window.URL.createObjectURL(blob);
+			var a = document.createElement("a");
+			document.body.appendChild(a);
+			a.style = "display: none";
+			a.href = url;
+			a.download = name+'.zip';
+			a.click();
+			window.URL.revokeObjectURL(url);
+			a.parentNode.removeChild(a);
+
 		},function(err){})
 	}
 
