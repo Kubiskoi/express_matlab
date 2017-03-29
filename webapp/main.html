@@ -63,8 +63,8 @@
 			</div>
        </div>
        <div class="col s4 right-align">
-       	{{logged_user}}
-       	<button ng-click="logout();">logou</button>
+       	<i class="material-icons" style="position: relative;top: 5px;">perm_identity</i><span>{{logged_user}}</span>
+       	<a class="btn-floating" ng-click="logout();"><i class="material-icons">power_settings_new</i></a>
        </div>
 </div>
 
@@ -79,13 +79,4 @@
     	<button class="btn-flat" ng-click="noDelete()">No</button>
     	<button class="btn-flat" ng-click="confirmedDeletion(about_to_be_deleted)">Yes</button>
 	</div>
-</div>
-
-
-<div>
-<b>todo</b>
-	<ul>
-		<li>logout</li>
-		<li>aktivovat AUTH!</li>
-	</ul>
 </div>
