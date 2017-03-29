@@ -1,28 +1,35 @@
-var klaw = require('klaw');
 var path = require('path');
+var fs = require('fs');
 
-
-//https://github.com/jprichardson/node-klaw
+// http://stackoverflow.com/questions/11194287/convert-a-directory-structure-in-the-filesystem-to-json-with-node-js
 module.exports = function (req,res) {
 
-	var filterFunc = function(item){
-	  var basename = path.basename(item)
-	  return basename === '.' || basename[0] !== '.'
+	var that = this;
+
+	this.dirTree = function(filename) {
+	    var stats = fs.lstatSync(filename),
+	        info = {
+	            path: filename,
+	            name: path.basename(filename)
+	        };
+
+	    //na miesto .DS_store alebo .git vrati string hidden
+	    if(info.name[0] === '.') return {name:"hidden",type:"hidden"};
+
+	    if (stats.isDirectory()) {
+	        info.type = "folder";
+	        info.children = fs.readdirSync(filename).map(function(child) {
+	            return that.dirTree(filename + '/' + child);
+	        });
+	    } else {
+	        // Assuming it's a file. In real life it could be a symlink or
+	        // something else!
+	        info.type = "other";
+	    }
+
+	    return info;
 	}
 
-	var items = [] // files, directories, symlinks, etc
-	klaw(__dirname+'/../simulacie/'+req.params.exp_name,{ filter : filterFunc  })
-	  .on('data', function (item) {
-	  	items.push(item.path);
-	  })
-	  .on('end', function () {
-		res.send(items);
-	  }).on('error', function (err, item) {
-    	console.log(err.message)
-    	console.log(item.path) // the file the error occurred on
-  	  })
-
-  
-
-
+	var my_dir = this.dirTree(__dirname+'/../simulacie/'+req.params.exp_name);
+	res.send(my_dir);
 };

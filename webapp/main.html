@@ -1,3 +1,9 @@
+<style type="text/css">
+	.pointer_class{
+		cursor: pointer;
+	}
+</style>
+
 <div class="row">
 	<div class="col s2 offset-s1 center-align">
 	  <div class="file-field input-field">
@@ -19,11 +25,39 @@
       <div class="col s4 offset-s1">
               <div class="card-panel" ng-repeat="exp in exps">
               	<div class="row">
-					<div class="col s9">{{exp}}	<a style="color:black;" class="waves-effect btn-small" ng-click="detail(exp)"><i class="material-icons tiny">info_outline</i></a>
+					<div class="col s9">
+						<div class="row">
+							<div class="col s1">
+								<a style="color:black;" class="waves-effect btn-small" ng-click="detail_view=!detail_view"><i class="material-icons tiny" style="padding-top:20px">perm_media</i>	</a>
+							</div>
+							<div class="col s11">
+								<h5>{{exp.name}}</h5>
+							</div>
+						</div>
+
+					<div ng-init="detail_view=false" ng-show="detail_view">
+
+						<script type="text/ng-template" id="children_renderer">
+							<div  ng-if="child.name!='hidden'">
+								<b class="pointer_class" ng-if="child.type=='folder'"><i class="material-icons tiny">perm_media</i>	{{child.name}}</b>
+							</div>
+							<div ng-if="child.name!='hidden'&&child.type=='other'">{{child.name}}</div>
+							
+							<ul ng-if="child.children" style="padding-left: 30px; display: none;">
+						    	<li ng-repeat="child in child.children" ng-include="'children_renderer'" ng-click="li_clicked($event)">
+						    	</li>
+							</ul>
+						</script>
+						  
+							<ul>	
+								<li ng-repeat="child in exp.children" ng-include="'children_renderer'" ng-click="li_clicked($event)"></li>
+							</ul>
+					
+					</div>
 					</div>
 					<div class="col s3">
-							<a style="color:black;" class="waves-effect btn-small" ng-click="download(exp)"><i class="small material-icons">play_for_work</i></a>
-							<a style="color:black;" class="waves-effect btn-small" ng-click="delete(exp)"><i class="material-icons">delete</i></a>
+							<a style="color:black;" class="waves-effect btn-small" ng-click="download(exp.name)"><i class="small material-icons">play_for_work</i></a>
+							<a style="color:black;" class="waves-effect btn-small" ng-click="delete(exp.name)"><i class="material-icons">delete</i></a>
 					</div>	
 				</div>
 			</div>
@@ -45,9 +79,8 @@
 <div>
 <b>todo</b>
 	<ul>
-		<li>dokoncit listovanie</li>
+<li>overenie pridania podla mena experimentu</li>
 		<li>logout</li>
-		<li>overenie pridania podla mena experimentu</li>
 		<li>aktivovat AUTH!</li>
 	</ul>
 </div>

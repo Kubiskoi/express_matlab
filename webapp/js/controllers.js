@@ -33,16 +33,33 @@ app.controller('LoginCtrl', function($scope,$location,$http,isLogged,$timeout) {
 
 app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader) {
 
+	//mali hack aby sa dali zatvarat a otvarat vylistovane foldre
+	$scope.li_clicked = function(ev){
+		ev.stopPropagation();
+		$(ev.currentTarget).find('ul').toggle();
+	}
+
+	//inicializacia pola pre experimenty
+	$scope.exps = [];
+	
 	//ak user_looged rovana sa true, user je prihlaseny cize ostavam na main
 	//ak user_logged rovna sa false, user nie je prihlaseny tak treba presmerovat na login formular
 	isLogged.isLo().then(function(user_logged){
 		if(!user_logged) $location.path('login');
 	})
 
-	//ziskaj objekt {"experiments":['a','b']}
+	//ziskaj objekt {"experiments":[{},{}]}
 	this.load_experiments = function(){
+		$scope.exps = [];
 		$http.get('/list_experiments').then(function(data){
-			$scope.exps = data.data.experiments;
+
+			//pre kazde meno ziskaj file structure, mohol to byt jeden request ale uz som mal backend takto tak to nebudem zas prerabat
+			//priestor na vylepsenie
+			angular.forEach(data.data.experiments,function(value){
+				$http.get('/detail/'+value).then(function(data){
+					$scope.exps.push(data.data);
+				},function(err){})
+			})
 		},function(err){
 
 		})
@@ -67,7 +84,7 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 		alert('Something went wrong during uploadig! Server needs to be restarted!');
 	};
 
-	//jQuery tu asi funguje kedze v index.html je nacitane skor
+	//jQuery tu funguje kedze v index.html je nacitany
 	$('.modal').modal();
 
 	//stlaci ikonu kontaineru vyskoci modal pre potvrdenie vymazania experimentu
@@ -110,12 +127,7 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 		},function(err){})
 	}
 
-	//stlaci ikonu infa a rozbali sa obsah priecinku
-	$scope.detail = function(name){
-		$http.get('/detail/'+name).then(function(data){
-			console.log(data);
-		},function(err){})
-	}
+	
 })
 
 
