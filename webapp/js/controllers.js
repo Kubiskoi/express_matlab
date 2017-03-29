@@ -31,7 +31,12 @@ app.controller('LoginCtrl', function($scope,$location,$http,isLogged,$timeout) {
 
 
 
-app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader) {
+app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader,$cookies) {
+	//inicializacia pola pre experimenty
+	$scope.exps = [];
+
+	$scope.logged_user = $cookies.get('logged_user_name');
+
 
 	//mali hack aby sa dali zatvarat a otvarat vylistovane foldre
 	$scope.li_clicked = function(ev){
@@ -39,8 +44,7 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 		$(ev.currentTarget).find('ul').toggle();
 	}
 
-	//inicializacia pola pre experimenty
-	$scope.exps = [];
+	
 	
 	//ak user_looged rovana sa true, user je prihlaseny cize ostavam na main
 	//ak user_logged rovna sa false, user nie je prihlaseny tak treba presmerovat na login formular
@@ -72,6 +76,32 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 	//https://github.com/nervgh/angular-file-upload
 	var that = this;
 	$scope.uploader = new FileUploader({queueLimit: 1});
+
+	$scope.uploader.filters.push({name:'filter1', fn:function(data) {
+		
+		// ak posledne 4 znaky nazvu vybraneho suboru niesu .zip, nie je to zip tak vrat false cize ho neprida do upload qeueu
+		if( data.name.slice(data.name.length-4,data.name.length) == '.zip' ){
+			
+			var already_exist = false;
+			//ak je teda zip, prejdem vsetky exps co je pole objektov uz priecinkov na servery,
+			// mam ich v scope lebo sa nacitali hned ako sa loadla stranka
+			// porovnamvam nazov a musim odstranit '.zip' z nazvu pre korektne porovnanie
+			//ak najdem zhodu ulozim som true do premmennej already_exist
+			angular.forEach($scope.exps,function(item){
+				if( item.name == data.name.slice(0,data.name.length-4)){
+					alert('File with same name already uploaded!');
+					already_exist = true;
+				}
+			});
+			//ak already_exist == true, tak uz existuje na serveri priecinok s takym menom
+			//tak vratim false aby upload nepokracoval, inak vratim true nech upload pokracuje
+			if(already_exist)return false;
+			else return true;
+		}else{
+			alert('File must be .zip!');
+			return false;
+		}
+	}});
 
 	//ak sa uspesne uploadne zipnuty experiment tak si nacitam znova experimenty aby sa updatlo view
 	$scope.uploader.onSuccessItem = function(item, response, status, headers) {
@@ -127,6 +157,14 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 		},function(err){})
 	}
 
+
+	$scope.logout = function(){
+		$http.get('/logout').then(function(data){
+			$location.path('login');
+		},function(err){
+			alert('Server Error!');
+		})
+	}
 	
 })
 

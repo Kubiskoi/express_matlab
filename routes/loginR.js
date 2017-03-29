@@ -43,6 +43,7 @@ module.exports = function (req, res) {
                 var lu_key = randomstring.generate();
                 req.session.lu = lu_key;
                 res.cookie('lu', lu_key);
+                res.cookie('logged_user_name', req.body.username);
                 res.sendStatus(200);
 
             }

@@ -1,4 +1,4 @@
-var app = angular.module("myApp", ["ngRoute","angularFileUpload"]);
+var app = angular.module("myApp", ["ngRoute","angularFileUpload","ngCookies"]);
 
 
 //vzdy chod na login route lebo jej controler overi ci je clovek prihlaseny, ak je posle ho na main ak nie ostane na logine

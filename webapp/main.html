@@ -9,7 +9,7 @@
 	  <div class="file-field input-field">
 	    <div class="btn">
 	      <span>add</span>
-	      <input type="file" accept=".zip" nv-file-select  filters="queueLimit" uploader="uploader" options="{'url':'save_new_exp'}">
+	      <input type="file" accept=".zip" nv-file-select  filters="queueLimit,filter1" uploader="uploader" options="{'url':'save_new_exp'}">
 	    </div>
 	    <div class="file-path-wrapper">
 	      <input class="file-path validate" type="text">
@@ -62,6 +62,10 @@
 				</div>
 			</div>
        </div>
+       <div class="col s4 right-align">
+       	{{logged_user}}
+       	<button ng-click="logout();">logou</button>
+       </div>
 </div>
 
 <!-- Modal Structure -->
@@ -76,10 +80,11 @@
     	<button class="btn-flat" ng-click="confirmedDeletion(about_to_be_deleted)">Yes</button>
 	</div>
 </div>
+
+
 <div>
 <b>todo</b>
 	<ul>
-<li>overenie pridania podla mena experimentu</li>
 		<li>logout</li>
 		<li>aktivovat AUTH!</li>
 	</ul>
