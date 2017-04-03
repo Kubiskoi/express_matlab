@@ -29,7 +29,7 @@ module.exports = function (req,res) {
 	          res.sendStatus(500);
 	        } else {
 	        	//ak sa subor spravne odoslal tak sa vymaze zo serveru
-	          console.log('Sent:', fileName);
+	          // console.log('Sent:', fileName);
 	          fs.unlink(__dirname+'/../'+req.params.exp_name+'.zip');
 	        }
 	      });

@@ -1,3 +1,4 @@
+// LIBS
 var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
@@ -10,6 +11,7 @@ var cookieParser = require('cookie-parser');
 var busboy = require('connect-busboy');
 
 
+// ROUTES
 var loginR = require('./routes/loginR.js');
 var listExpsR = require('./routes/listExpsR.js');
 var receiveExpR = require('./routes/receiveExpR.js');
@@ -17,6 +19,7 @@ var deleteExperimentR = require('./routes/deleteExperimentR.js');
 var downloadExperimentR = require('./routes/downloadExperimentR.js');
 var detailR = require('./routes/detailR.js');
 var logoutR = require('./routes/logoutR.js');
+var isLoggedR = require('./routes/isLoggedR.js');
 
 
 
@@ -47,24 +50,13 @@ app.delete('/delete_experiment/:del_exp_name',deleteExperimentR);
 app.get('/download_experiment/:exp_name',downloadExperimentR);
 app.get('/detail/:exp_name',detailR);
 app.get('/logout',logoutR);
-
-
 //overi clientovi ci je prihlasny, vrati 200 ak je prihlaseny, vrati false ak nie je prihlaseny
-app.get('/get_logged_user', function(req,res){
-
-	//tu overujem ci moj randomny vygenerovany session string je rovnaky u klienta v cookies ako aj na serveri
-	//a ci vobec exsituje takyto string, lebo aj dva krat undefined sa rovna ale vtedy nie je nikto prihlaseny
-	if(req.session.lu == req.cookies.lu && req.session.lu && req.cookies.lu){
-		res.sendStatus(200);
-	}else{
-		res.sendStatus(401);
-	}
-});
+app.get('/get_logged_user',isLoggedR);
 
 
-
-
-
+//=================================================================================================
+//=================================================================================================
+//MATLABOVSKA CAST
 app.post('/matlab/result',function(req,res){
 	// console.log(req.body);
 

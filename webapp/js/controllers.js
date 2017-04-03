@@ -32,6 +32,10 @@ app.controller('LoginCtrl', function($scope,$location,$http,isLogged,$timeout) {
 
 
 app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader,$cookies) {
+
+	//jQuery tu funguje kedze v index.html je nacitany
+	$('.modal').modal();
+
 	//inicializacia pola pre experimenty
 	$scope.exps = [];
 
@@ -89,7 +93,8 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 			//ak najdem zhodu ulozim som true do premmennej already_exist
 			angular.forEach($scope.exps,function(item){
 				if( item.name == data.name.slice(0,data.name.length-4)){
-					alert('File with same name already uploaded!');
+					// alert('File with same name already uploaded!');
+					$('#same_name_modal').modal('open');
 					already_exist = true;
 				}
 			});
@@ -98,7 +103,8 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 			if(already_exist)return false;
 			else return true;
 		}else{
-			alert('File must be .zip!');
+			// alert('File must be .zip!');
+			$('#must_zip_modal').modal('open');
 			return false;
 		}
 	}});
@@ -114,8 +120,7 @@ app.controller('MainCtrl', function($scope,$location,$http,isLogged,FileUploader
 		alert('Something went wrong during uploadig! Server needs to be restarted!');
 	};
 
-	//jQuery tu funguje kedze v index.html je nacitany
-	$('.modal').modal();
+	
 
 	//stlaci ikonu kontaineru vyskoci modal pre potvrdenie vymazania experimentu
 	$scope.delete = function(about_to_be_deleted){
