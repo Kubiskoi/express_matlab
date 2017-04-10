@@ -58,9 +58,10 @@ app.get('/get_logged_user',isLoggedR);
 //=================================================================================================
 //MATLABOVSKA CAST
 app.post('/matlab/result',function(req,res){
-	// console.log(req.body);
 
-	io.emit('results back',req.body);
+	//emitujem userovi ktoreho meno ide z matlabu, lebo tot broadcastne vsetkym clientom tak nech 
+	//vysledky prijma len ten kto o ne poziadal
+	io.emit('results_for:'+req.body.result.user,req.body);
 	//odpovedam matlabu
 	res.sendStatus(200);
 })
