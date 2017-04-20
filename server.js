@@ -59,7 +59,7 @@ app.get('/get_logged_user',isLoggedR);
 //MATLABOVSKA CAST
 app.post('/matlab/result',function(req,res){
 
-	//emitujem userovi ktoreho meno ide z matlabu, lebo tot broadcastne vsetkym clientom tak nech 
+	//emitujem userovi ktoreho meno ide z matlabu, lebo toto broadcastne vsetkym clientom tak nech 
 	//vysledky prijma len ten kto o ne poziadal
 	io.emit('results_for:'+req.body.result.user,req.body);
 	//odpovedam matlabu
@@ -90,6 +90,7 @@ io.on('connection', function(socket){
 		// https://www.mathworks.com/help/matlab/ref/containers.map.values.html
 		var map = "inpMAp = containers.Map("+k+", "+v+")";
 		// console.log(map);
+		//po spusteni matlabu sa dalsie prikazy vykonavaju v matlabovskom prostredi
 		var cmd = '\/Applications\/MATLAB_R2015b.app\/bin\/matlab -nosplash -nodesktop -noFigureWindows -r \"cd '+__dirname+'/simulacie\/'+params.foldername+';'+map+';'+params.mfilepar+'(inpMAp);'+params.mfilescript+';exit;\"';
 		shell.exec(cmd, function (code, stdout, stderr) {
 		    console.log('matlab exit');
