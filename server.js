@@ -79,10 +79,10 @@ io.on('connection', function(socket){
 			k=k+"'"+Object.keys(item)[0]+"',";
 			v=v+item[Object.keys(item)[0]]+",";
 		});
-		k = k+"'logged_user'";
+		k = k+"'logged_user','ipadrs','port'";
 		k=k+"}";
 		// console.log(k);	
-		v = v+"'"+params.logged_user+"'";
+		v = v+"'"+params.logged_user+"','"+params.ipadrs+"','"+params.port+"'";
 		v=v+"}";
 		// console.log(v);	
 
