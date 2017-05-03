@@ -57,10 +57,9 @@ app.get('/get_logged_user',isLoggedR);
 //=================================================================================================
 //=================================================================================================
 //MATLABOVSKA CAST
-app.post('/matlab/result',function(req,res){
 
-	//emitujem userovi ktoreho meno ide z matlabu, lebo toto broadcastne vsetkym clientom tak nech 
-	//vysledky prijma len ten kto o ne poziadal
+app.post('/matlab/result',function(req,res){
+	//emit pre uzivatela 
 	io.emit('results_for:'+req.body.result.user,req.body);
 	//odpovedam matlabu
 	res.sendStatus(200);
@@ -88,10 +87,10 @@ io.on('connection', function(socket){
 
 		// https://www.mathworks.com/help/matlab/matlab_prog/creating-a-map-object.html
 		// https://www.mathworks.com/help/matlab/ref/containers.map.values.html
-		var map = "inpMAp = containers.Map("+k+", "+v+")";
+		var map = "inpMap = containers.Map("+k+", "+v+")";
 		// console.log(map);
 		//po spusteni matlabu sa dalsie prikazy vykonavaju v matlabovskom prostredi
-		var cmd = '\/Applications\/MATLAB_R2015b.app\/bin\/matlab -nosplash -nodesktop -noFigureWindows -r \"cd '+__dirname+'/simulacie\/'+params.foldername+';'+map+';'+params.mfilepar+'(inpMAp);'+params.mfilescript+';exit;\"';
+		var cmd = '\/Applications\/MATLAB_R2015b.app\/bin\/matlab -nosplash -nodesktop -noFigureWindows -r \"cd '+__dirname+'/simulacie\/'+params.foldername+';'+map+';'+params.mfilepar+'(inpMap);'+params.mfilescript+';exit;\"';
 		shell.exec(cmd, function (code, stdout, stderr) {
 		    console.log('matlab exit');
 		});
@@ -101,6 +100,9 @@ io.on('connection', function(socket){
 		console.log('user disconnected');
 	});
 }); 
+
+//=================================================================================================
+//=================================================================================================
 
 http.listen(process.env.PORT || 3001, function(){
   console.log('listening on *:'+(process.env.PORT || 3001));
