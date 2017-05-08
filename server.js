@@ -57,10 +57,14 @@ app.get('/get_logged_user',isLoggedR);
 //=================================================================================================
 //=================================================================================================
 //MATLABOVSKA CAST
-
+// var t1 = + new Date;
+// var t2 = 0;
 app.post('/matlab/result',function(req,res){
+	// t2 = + new Date;
+	// console.log("time: %s",t2-t1);
+	// t1 = t2;
 	//emit pre uzivatela 
-	io.emit('results_for:'+req.body.result.user,req.body);
+	io.emit('results_for:'+req.body.result.user+req.body.result.from,req.body);
 	//odpovedam matlabu
 	res.sendStatus(200);
 })
@@ -78,10 +82,10 @@ io.on('connection', function(socket){
 			k=k+"'"+Object.keys(item)[0]+"',";
 			v=v+item[Object.keys(item)[0]]+",";
 		});
-		k = k+"'logged_user','ipadrs','port'";
+		k = k+"'logged_user','ipadrs','port','from'";
 		k=k+"}";
 		// console.log(k);	
-		v = v+"'"+params.logged_user+"','"+params.ipadrs+"','"+params.port+"'";
+		v = v+"'"+params.logged_user+"','"+params.ipadrs+"','"+params.port+"','"+params.from+"'";
 		v=v+"}";
 		// console.log(v);	
 
@@ -90,6 +94,7 @@ io.on('connection', function(socket){
 		var map = "inpMap = containers.Map("+k+", "+v+")";
 		// console.log(map);
 		//po spusteni matlabu sa dalsie prikazy vykonavaju v matlabovskom prostredi
+		//system_dependent(14,0) vypne zvuk nakonci simulcie
 		var cmd = '\/Applications\/MATLAB_R2015b.app\/bin\/matlab -nosplash -nodesktop -noFigureWindows -r \"cd '+__dirname+'/simulacie\/'+params.foldername+';'+map+';'+params.mfilepar+'(inpMap);'+params.mfilescript+';exit;\"';
 		shell.exec(cmd, function (code, stdout, stderr) {
 		    console.log('matlab exit');
