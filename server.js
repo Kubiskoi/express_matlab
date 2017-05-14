@@ -64,6 +64,10 @@ app.post('/matlab/result',function(req,res){
 	// console.log("time: %s",t2-t1);
 	// t1 = t2;
 	//emit pre uzivatela 
+	// console.log(req.body.result.user);
+	// console.log(req.body.result.from);
+	// console.log(req.body);
+	// console.log('/////////////////////////////');
 	io.emit('results_for:'+req.body.result.user+req.body.result.from,req.body);
 	//odpovedam matlabu
 	res.sendStatus(200);
